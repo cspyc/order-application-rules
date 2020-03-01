@@ -1,0 +1,10 @@
+package rules
+
+import com.winning.rule.engine.model.TestUser;
+rule "test"
+    when
+        $user:TestUser($name:name,name!=null)
+    then
+        System.out.println("测试用户姓名不为空！姓名：" + $name );
+
+end
