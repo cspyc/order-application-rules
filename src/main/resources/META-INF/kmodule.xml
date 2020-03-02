@@ -6,5 +6,8 @@
         <ksession name="ruleTest-session"/>
     </kbase>
 
+    <kbase name="medicine-rule" packages="rules.medicine">
+        <ksession name="medicine-session"/>
+    </kbase>
 
 </kmodule>

@@ -1,0 +1,26 @@
+package rules.medicine
+
+import com.winning.rule.engine.model.ApplicationRule;
+import com.winning.rule.engine.model.ExecPlan;
+import com.winning.rule.engine.model.SimulateCurrentTime;
+
+
+rule "todayMedicineApplication"
+    when
+
+        $rule:ApplicationRule($stopTime:everydayStopApplicationTime,
+            $splitTime:splitApplicationToTwoPartTime,
+            everydayStopApplicationTime!=null,
+            splitApplicationToTwoPartTime!=null)
+
+        $simulateCurrentTime:SimulateCurrentTime($currentTime:currentTime,
+            currentTime != null)
+
+        $execPlan:ExecPlan($execPlanId:execPlanId,
+            $execTime:planedExecTime,
+            planedExecTime!=null,
+            $currentTime < $stopTime)
+
+    then
+        System.out.println("需领药的执行计划：" + $execPlanId);
+end
