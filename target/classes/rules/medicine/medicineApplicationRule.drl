@@ -3,24 +3,93 @@ package rules.medicine
 import com.winning.rule.engine.model.ApplicationRule;
 import com.winning.rule.engine.model.ExecPlan;
 import com.winning.rule.engine.model.SimulateCurrentTime;
+import java.util.List;
 
+global List<ExecPlan> execPlanList;
 
 rule "todayMedicineApplication"
-    when
 
+    when
         $rule:ApplicationRule($stopTime:everydayStopApplicationTime,
             $splitTime:splitApplicationToTwoPartTime,
             everydayStopApplicationTime!=null,
             splitApplicationToTwoPartTime!=null)
 
         $simulateCurrentTime:SimulateCurrentTime($currentTime:currentTime,
-            currentTime != null)
+            $today:currentDate,
+            $tomorrow:tomorrowDate,
+            currentDate!=null,
+            tomorrowDate!=null,
+            currentTime!=null)
 
         $execPlan:ExecPlan($execPlanId:execPlanId,
             $execTime:planedExecTime,
             planedExecTime!=null,
-            $currentTime < $stopTime)
+            $currentTime < $stopTime,
+            $execTime<=$today)
 
     then
-        System.out.println("需领药的执行计划：" + $execPlanId);
+        execPlanList.add($execPlan);
+        System.out.println("rule_3:todayMedicineApplication-需领药的执行计划：" + $execPlanId);
+end
+
+rule "applicationToSecondDay"
+    when
+        $rule1:ApplicationRule($stopTime1:everydayStopApplicationTime,
+                    $splitTime1:splitApplicationToTwoPartTime,
+                    $secondDayTime1:applicationToSecondDayTime,
+                    everydayStopApplicationTime!=null,
+                    splitApplicationToTwoPartTime!=null,
+                    applicationToSecondDayTime!=null)
+
+                $simulateCurrentTime1:SimulateCurrentTime($currentTime1:currentTime,
+                      $today1:currentDate,
+                      $tomorrow1:tomorrowDate,
+                      currentDate!=null,
+                      tomorrowDate!=null,
+                      currentTime!=null)
+
+                $execPlan1:ExecPlan($execPlanId1:execPlanId,
+                    $execTime1:planedExecTime,
+                    planedExecTime!=null,
+                    $currentTime1<$stopTime1,
+                    $execTime1<=$tomorrow1,
+                    $execTime1>$today1)
+
+    then
+        execPlanList.add($execPlan1);
+        System.out.println("rule_2:applicationToSecondDay-需领药的执行计划：" + $execPlanId1);
+end
+
+rule "applicationThoughHoliday"
+    when
+        $rule2:ApplicationRule($stopTime2:everydayStopApplicationTime,
+                    $splitTime2:splitApplicationToTwoPartTime,
+                    $secondDayTime2:applicationToSecondDayTime,
+                    $holidayBeginDay:holidayBeginDay,
+                    $holidayEndDay:holidayEndDay,
+                    $firstDayAfterHolidayTime:firstDayAfterHoliday,
+                    everydayStopApplicationTime!=null,
+                    splitApplicationToTwoPartTime!=null,
+                    applicationToSecondDayTime!=null,
+                    holidayBeginDay!=null,
+                    holidayEndDay!=null,
+                    firstDayAfterHoliday!=null)
+
+        $simulateCurrentTime2:SimulateCurrentTime($currentTime2:currentTime,
+              $today2:currentDate,
+              $tomorrow2:tomorrowDate,
+              currentDate!=null,
+              tomorrowDate!=null,
+              currentTime!=null)
+
+        $execPlan2:ExecPlan($execPlanId2:execPlanId,
+            $execTime2:planedExecTime,
+            planedExecTime!=null,
+            $currentTime2<$stopTime2,
+            $execTime2>$holidayEndDay,
+            $execTime2<$firstDayAfterHolidayTime)
+    then
+        execPlanList.add($execPlan2);
+        System.out.println("rule_3:applicationThoughHoliday-需领药的执行计划：" + $execPlanId2);
 end

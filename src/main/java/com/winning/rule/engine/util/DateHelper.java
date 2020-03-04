@@ -1,6 +1,7 @@
 package com.winning.rule.engine.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
@@ -43,5 +44,21 @@ public class DateHelper {
     public static String formatDate(Date date,String dateFormat){
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(date);
+    }
+
+    /**
+     * 日期计算-加减天数
+     * @param date
+     * @param days
+     * @return
+     */
+    public static Date dateAdd(Date date,int days) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH,days);
+
+        Date dateTime = c.getTime();
+
+        return dateTime;
     }
 }

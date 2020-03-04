@@ -31,4 +31,12 @@ public class ExecPlan {
     public void setPlanedExecTime(Date planedExecTime) {
         this.planedExecTime = planedExecTime;
     }
+
+    @Override
+    public String toString() {
+        return "ExecPlan{" +
+                "执行计划ID =" + execPlanId +
+                ", 执行时间 =" + planedExecTime +
+                '}';
+    }
 }

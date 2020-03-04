@@ -9,8 +9,17 @@ import java.util.Date;
  */
 public class SimulateCurrentTime {
     private Date currentTime;
+    private Date currentDate;
+    private Date tomorrowDate;
+
 
     public SimulateCurrentTime() {
+    }
+
+    public SimulateCurrentTime(Date currentTime, Date currentDate, Date tomorrowDate) {
+        this.currentTime = currentTime;
+        this.currentDate = currentDate;
+        this.tomorrowDate = tomorrowDate;
     }
 
     public SimulateCurrentTime(Date currentTime) {
@@ -25,9 +34,28 @@ public class SimulateCurrentTime {
         this.currentTime = currentTime;
     }
 
+        public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public Date getTomorrowDate() {
+        return tomorrowDate;
+    }
+
+    public void setTomorrowDate(Date tomorrowDate) {
+        this.tomorrowDate = tomorrowDate;
+    }
 
     @Override
     public String toString() {
-        return "模拟当前时间：" + DateHelper.formatDate(currentTime);
+        return "SimulateCurrentTime{" +
+                "模拟当前时间点 =" + currentTime +
+                ", 当前日期 =" + currentDate +
+                ", 第二天日期 =" + tomorrowDate +
+                '}';
     }
 }
